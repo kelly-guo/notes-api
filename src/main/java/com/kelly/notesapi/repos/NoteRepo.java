@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.kelly.notesapi.entities.Note;
 
-public interface NoteRepo extends JpaRepository<Long, Note>{
+public interface NoteRepo extends JpaRepository<Note, Long>{
     List<Note>findByUserId(Long userId);
 
     
