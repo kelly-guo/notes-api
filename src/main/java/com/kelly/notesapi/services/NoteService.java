@@ -3,18 +3,19 @@ package com.kelly.notesapi.services;
 import java.util.List;
 
 import com.kelly.notesapi.entities.Note;
+import com.kelly.notesapi.entities.User;
 
 public interface NoteService {
 
-    Note createNote(Long userId, String title, String content);
+    Note createNote(User user, String title, String content);
 
     List<Note> getUserNotes(Long userId);
 
-    Note getByNoteId(Long id);
+    Note getByNoteId(Long id, User user);
 
-    Note updateNote(Long userId, String title, String content);
+    Note updateNote(Long noteId, String title, String content, User user);
 
-    void deleteNote(Long id);
+    void deleteNote(Long id, User user);
 
 
 

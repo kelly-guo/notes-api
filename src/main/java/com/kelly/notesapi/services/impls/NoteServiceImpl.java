@@ -18,8 +18,7 @@ public class NoteServiceImpl implements NoteService {
         this.userRepo = userRepo;
     }
     @Override
-    public Note createNote(Long userId, String title, String content) {
-        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public Note createNote(User user, String title, String content) {
         Note note = new Note();
         note.setTitle(title);
         note.setUser(user);
@@ -34,18 +33,31 @@ public class NoteServiceImpl implements NoteService {
        return noteRepo.findByUserId(userId);
     }
     @Override
-    public Note getByNoteId(Long id) {
-        return noteRepo.findById(id).orElseThrow(() -> new RuntimeException("Note not found"));
+    public Note getByNoteId(Long id, User user) {
+        Note note= noteRepo.findById(id).orElseThrow(() -> new RuntimeException("Note not found"));
+        if (!note.getUser().getUserId().equals(user.getUserId())){
+            throw new RuntimeException("User does not match");
+        }
+        return note;
     }
     @Override
-    public Note updateNote(Long userId, String title, String content) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateNote'");
+    public Note updateNote(Long noteId, String title, String content, User user) {
+        Note note= noteRepo.findById(noteId).orElseThrow(() -> new RuntimeException("Note not found"));
+        if (!note.getUser().getUserId().equals(user.getUserId())){
+            throw new RuntimeException("User does not match");
+        }
+        note.setContents(content);
+        note.setTitle(title);
+        note.setUpdatedAt(LocalDateTime.now());
+        return noteRepo.save(note);
     }
     @Override
-    public void deleteNote(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteNote'");
+    public void deleteNote(Long id, User user) {
+        Note note= noteRepo.findById(id).orElseThrow(() -> new RuntimeException("Note not found"));
+        if (!note.getUser().getUserId().equals(user.getUserId())){
+            throw new RuntimeException("User does not match");
+        }
+        noteRepo.delete(note);
     }
 
     
