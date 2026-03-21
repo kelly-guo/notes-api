@@ -46,6 +46,7 @@ public class NoteServiceImpl implements NoteService {
         if (!note.getUser().getUserId().equals(user.getUserId())){
             throw new RuntimeException("User does not match");
         }
+        //ADD FULL UPDATE
         note.setContents(content);
         note.setTitle(title);
         note.setUpdatedAt(LocalDateTime.now());

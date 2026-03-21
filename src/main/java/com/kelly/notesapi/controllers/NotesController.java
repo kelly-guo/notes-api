@@ -55,6 +55,7 @@ public class NotesController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<NoteResponse> updateNote(@PathVariable Long id, UpdateNoteRequest updateNoteRequest, Authentication auth){
         User user = (User) auth.getPrincipal();
+        //ADD FULL UPDATE
         NoteResponse note = noteMapper.toDto(noteService.updateNote(id, updateNoteRequest.getTitle(), updateNoteRequest.getContent(), user));
         return ResponseEntity.ok(note);
 
