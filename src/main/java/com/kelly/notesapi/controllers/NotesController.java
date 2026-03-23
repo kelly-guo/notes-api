@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kelly.notesapi.controllers.dtos.CreateNoteRequest;
@@ -39,9 +40,9 @@ public class NotesController {
     }
 
     @GetMapping
-    public ResponseEntity<List<NoteResponse>> getAllNotes(Authentication auth){
+    public ResponseEntity<List<NoteResponse>> getAllNotes(Authentication auth, @RequestParam(required=false) Boolean archived, @RequestParam(required=false) Boolean pinned){
         User user = (User) auth.getPrincipal();
-        List<NoteResponse> notes = noteService.getUserNotes(user.getUserId()).stream().map(noteMapper::toDto).toList();
+        List<NoteResponse> notes = noteService.getUserNotes(user,pinned,archived).stream().map(noteMapper::toDto).toList();
         return ResponseEntity.ok(notes);
     }
 
@@ -56,7 +57,7 @@ public class NotesController {
     public ResponseEntity<NoteResponse> updateNote(@PathVariable Long id, UpdateNoteRequest updateNoteRequest, Authentication auth){
         User user = (User) auth.getPrincipal();
         //ADD FULL UPDATE
-        NoteResponse note = noteMapper.toDto(noteService.updateNote(id, updateNoteRequest.getTitle(), updateNoteRequest.getContent(), user));
+        NoteResponse note = noteMapper.toDto(noteService.updateNote(id, updateNoteRequest.getTitle(), updateNoteRequest.getContent(), user, updateNoteRequest.isPinned(), updateNoteRequest.isArchived()));
         return ResponseEntity.ok(note);
 
 

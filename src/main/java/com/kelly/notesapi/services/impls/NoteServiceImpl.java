@@ -29,8 +29,20 @@ public class NoteServiceImpl implements NoteService {
 
     }
     @Override
-    public List<Note> getUserNotes(Long userId) {
-       return noteRepo.findByUserId(userId);
+    public List<Note> getUserNotes(User user, Boolean pinned, Boolean archived) {
+        List<Note>notes;
+        Long userId = user.getUserId();
+        if (pinned!=null&&archived!=null){
+            notes = noteRepo.findByUserIdAndArchivedAndPinned(userId, archived, pinned);
+        } else if (pinned!=null){
+            notes = noteRepo.findByUserIdAndPinned(userId, pinned);
+        } else if (archived!=null){
+            notes = noteRepo.findByUserIdAndArchived(userId, archived);
+        } else {
+            notes = noteRepo.findByUserId(userId);
+        }
+
+        return notes;     
     }
     @Override
     public Note getByNoteId(Long id, User user) {
@@ -41,7 +53,7 @@ public class NoteServiceImpl implements NoteService {
         return note;
     }
     @Override
-    public Note updateNote(Long noteId, String title, String content, User user) {
+    public Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived) {
         Note note= noteRepo.findById(noteId).orElseThrow(() -> new RuntimeException("Note not found"));
         if (!note.getUser().getUserId().equals(user.getUserId())){
             throw new RuntimeException("User does not match");
@@ -50,6 +62,8 @@ public class NoteServiceImpl implements NoteService {
         note.setContents(content);
         note.setTitle(title);
         note.setUpdatedAt(LocalDateTime.now());
+        note.setArchived(archived);
+        note.setPinned(pinned);
         return noteRepo.save(note);
     }
     @Override
