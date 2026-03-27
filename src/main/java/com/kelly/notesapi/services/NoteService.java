@@ -1,6 +1,7 @@
 package com.kelly.notesapi.services;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.kelly.notesapi.entities.Note;
 import com.kelly.notesapi.entities.User;
@@ -9,7 +10,7 @@ public interface NoteService {
 
     Note createNote(User user, String title, String content);
 
-    List<Note> getUserNotes(User user, Boolean pinned, Boolean archived);
+    Page<Note> getUserNotes(User user, Boolean pinned, Boolean archived, Pageable pageable);
 
     Note getByNoteId(Long id, User user);
 

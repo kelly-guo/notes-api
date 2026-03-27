@@ -1,19 +1,20 @@
 package com.kelly.notesapi.repos;
 
-import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.kelly.notesapi.entities.Note;
 
 public interface NoteRepo extends JpaRepository<Note, Long>{
-    List<Note>findByUserId(Long userId);
+    Page<Note>findByUserId(Long userId, Pageable page);
 
-    List<Note> findByUserIdAndPinned(Long userId, Boolean pinned);
+    Page<Note> findByUserIdAndPinned(Long userId, Boolean pinned,Pageable page);
 
-    List<Note> findByUserIdAndArchived(Long userId, Boolean archived);
+    Page<Note> findByUserIdAndArchived(Long userId, Boolean archived,Pageable page);
 
-    List<Note> findByUserIdAndArchivedAndPinned(Long userId, Boolean archived, Boolean pinned);
+    Page<Note> findByUserIdAndArchivedAndPinned(Long userId, Boolean archived, Boolean pinned,Pageable page);
 
 
 

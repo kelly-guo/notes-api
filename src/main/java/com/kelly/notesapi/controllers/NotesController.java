@@ -1,7 +1,7 @@
 package com.kelly.notesapi.controllers;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,9 +42,9 @@ public class NotesController {
     }
 
     @GetMapping
-    public ResponseEntity<List<NoteResponse>> getAllNotes(Authentication auth, @RequestParam(required=false) Boolean archived, @RequestParam(required=false) Boolean pinned){
+    public ResponseEntity<Page<NoteResponse>> getAllNotes(Authentication auth, @RequestParam(required=false) Boolean archived, @RequestParam(required=false) Boolean pinned, Pageable pageable){
         User user = (User) auth.getPrincipal();
-        List<NoteResponse> notes = noteService.getUserNotes(user,pinned,archived).stream().map(noteMapper::toDto).toList();
+        Page<NoteResponse> notes = noteService.getUserNotes(user,pinned,archived,pageable).map(noteMapper::toDto);
         return ResponseEntity.ok(notes);
     }
 

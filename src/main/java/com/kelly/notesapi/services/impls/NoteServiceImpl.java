@@ -1,7 +1,9 @@
 package com.kelly.notesapi.services.impls;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.kelly.notesapi.entities.Note;
 import com.kelly.notesapi.entities.User;
@@ -29,17 +31,17 @@ public class NoteServiceImpl implements NoteService {
 
     }
     @Override
-    public List<Note> getUserNotes(User user, Boolean pinned, Boolean archived) {
-        List<Note>notes;
+    public Page<Note> getUserNotes(User user, Boolean pinned, Boolean archived, Pageable pageable) {
+        Page<Note>notes;
         Long userId = user.getUserId();
         if (pinned!=null&&archived!=null){
-            notes = noteRepo.findByUserIdAndArchivedAndPinned(userId, archived, pinned);
+            notes = noteRepo.findByUserIdAndArchivedAndPinned(userId, archived, pinned,pageable);
         } else if (pinned!=null){
-            notes = noteRepo.findByUserIdAndPinned(userId, pinned);
+            notes = noteRepo.findByUserIdAndPinned(userId, pinned,pageable);
         } else if (archived!=null){
-            notes = noteRepo.findByUserIdAndArchived(userId, archived);
+            notes = noteRepo.findByUserIdAndArchived(userId, archived,pageable);
         } else {
-            notes = noteRepo.findByUserId(userId);
+            notes = noteRepo.findByUserId(userId,pageable);
         }
 
         return notes;     
