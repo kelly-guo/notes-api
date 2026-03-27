@@ -20,6 +20,8 @@ import com.kelly.notesapi.entities.User;
 import com.kelly.notesapi.mappers.NoteMapper;
 import com.kelly.notesapi.services.NoteService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/notes")
 public class NotesController {
@@ -32,7 +34,7 @@ public class NotesController {
     }
 
     @PostMapping
-    public ResponseEntity<NoteResponse> createNote(@RequestBody CreateNoteRequest createNoteRequest, Authentication auth){
+    public ResponseEntity<NoteResponse> createNote(@Valid @RequestBody CreateNoteRequest createNoteRequest, Authentication auth){
         User user = (User) auth.getPrincipal();
         NoteResponse note = noteMapper.toDto(noteService.createNote(user, createNoteRequest.getTitle(), createNoteRequest.getContent()));
         return ResponseEntity.ok(note);
@@ -54,7 +56,7 @@ public class NotesController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<NoteResponse> updateNote(@PathVariable Long id, UpdateNoteRequest updateNoteRequest, Authentication auth){
+    public ResponseEntity<NoteResponse> updateNote(@PathVariable Long id, @Valid @RequestBody UpdateNoteRequest updateNoteRequest, Authentication auth){
         User user = (User) auth.getPrincipal();
         //ADD FULL UPDATE
         NoteResponse note = noteMapper.toDto(noteService.updateNote(id, updateNoteRequest.getTitle(), updateNoteRequest.getContent(), user, updateNoteRequest.isPinned(), updateNoteRequest.isArchived()));
