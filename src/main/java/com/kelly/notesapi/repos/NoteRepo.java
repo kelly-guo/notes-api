@@ -16,6 +16,8 @@ public interface NoteRepo extends JpaRepository<Note, Long>{
 
     Page<Note> findByUserIdAndArchivedAndPinned(Long userId, Boolean archived, Boolean pinned,Pageable page);
 
+    Page<Note> findByUserIdAndTags_Name(Long userId, String tagName, Pageable pageable);
+
 
 
     
