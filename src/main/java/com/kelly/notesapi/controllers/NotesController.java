@@ -36,7 +36,7 @@ public class NotesController {
     @PostMapping
     public ResponseEntity<NoteResponse> createNote(@Valid @RequestBody CreateNoteRequest createNoteRequest, Authentication auth){
         User user = (User) auth.getPrincipal();
-        NoteResponse note = noteMapper.toDto(noteService.createNote(user, createNoteRequest.getTitle(), createNoteRequest.getContent()));
+        NoteResponse note = noteMapper.toDto(noteService.createNote(user, createNoteRequest.getTitle(), createNoteRequest.getContent(),createNoteRequest.getTags()));
         return ResponseEntity.ok(note);
 
     }

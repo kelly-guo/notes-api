@@ -1,13 +1,18 @@
 package com.kelly.notesapi.services.impls;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.kelly.notesapi.entities.Note;
+import com.kelly.notesapi.entities.Tag;
 import com.kelly.notesapi.entities.User;
 import com.kelly.notesapi.repos.NoteRepo;
+import com.kelly.notesapi.repos.TagRepo;
 import com.kelly.notesapi.repos.UserRepo;
 import com.kelly.notesapi.services.NoteService;
 
@@ -15,17 +20,21 @@ public class NoteServiceImpl implements NoteService {
 
     private final NoteRepo noteRepo;
     private final UserRepo userRepo;
-    public NoteServiceImpl(NoteRepo noteRepo, UserRepo userRepo) {
+    private final TagRepo tagRepo;
+   
+    public NoteServiceImpl(NoteRepo noteRepo, UserRepo userRepo, TagRepo tagRepo) {
         this.noteRepo = noteRepo;
         this.userRepo = userRepo;
+        this.tagRepo = tagRepo;
     }
     @Override
-    public Note createNote(User user, String title, String content) {
+    public Note createNote(User user, String title, String content, List<String>names) {
         Note note = new Note();
         note.setTitle(title);
         note.setUser(user);
         note.setContents(content);
         note.setCreatedAt(LocalDateTime.now());
+        note.setTags(processTags(names));
         return noteRepo.save(note);
 
 
@@ -75,6 +84,27 @@ public class NoteServiceImpl implements NoteService {
             throw new RuntimeException("User does not match");
         }
         noteRepo.delete(note);
+    }
+   
+    @Override
+    public Set<Tag> processTags(List<String> names) {
+        if (names==null||names.isEmpty()){
+            return new HashSet<>();
+        }
+        Set<Tag>tags = new HashSet<>();
+        for (String name:names){
+            Tag tag = tagRepo.findByName(name).orElseGet(()->{
+                Tag newTag = new Tag();
+                newTag.setName(name);
+                return tagRepo.save(newTag);
+            });
+            tags.add(tag);
+
+        }
+        return tags;
+
+
+        
     }
 
     

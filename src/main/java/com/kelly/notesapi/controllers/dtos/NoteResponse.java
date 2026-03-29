@@ -1,6 +1,9 @@
 package com.kelly.notesapi.controllers.dtos;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.kelly.notesapi.entities.Tag;
 
 import lombok.Data;
 
@@ -13,6 +16,7 @@ public class NoteResponse {
     private boolean archived;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<Tag>tags;
 
 
 

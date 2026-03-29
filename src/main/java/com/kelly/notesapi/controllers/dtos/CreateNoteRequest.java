@@ -1,5 +1,8 @@
 package com.kelly.notesapi.controllers.dtos;
 
+
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -12,5 +15,9 @@ public class CreateNoteRequest {
 
     @Size(max = 1000, message = "Content cannot exceed 1000 characters")
     private String content;
+
+    private List<String>tags;
+
+
     
 }
