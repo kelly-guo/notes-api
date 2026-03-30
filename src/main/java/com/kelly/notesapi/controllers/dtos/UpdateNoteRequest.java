@@ -1,5 +1,7 @@
 package com.kelly.notesapi.controllers.dtos;
 
+import java.util.List;
+
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -14,6 +16,8 @@ public class UpdateNoteRequest {
     private boolean archived;
 
     private boolean pinned;
+
+    private List<String>tags;
 
 
     

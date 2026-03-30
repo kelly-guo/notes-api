@@ -18,7 +18,7 @@ public interface NoteService {
 
     Note getByNoteId(Long id, User user);
 
-    Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived);
+    Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived, List<String>tags);
 
     void deleteNote(Long id, User user);
 

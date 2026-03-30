@@ -59,7 +59,7 @@ public class NotesController {
     public ResponseEntity<NoteResponse> updateNote(@PathVariable Long id, @Valid @RequestBody UpdateNoteRequest updateNoteRequest, Authentication auth){
         User user = (User) auth.getPrincipal();
         //ADD FULL UPDATE
-        NoteResponse note = noteMapper.toDto(noteService.updateNote(id, updateNoteRequest.getTitle(), updateNoteRequest.getContent(), user, updateNoteRequest.isPinned(), updateNoteRequest.isArchived()));
+        NoteResponse note = noteMapper.toDto(noteService.updateNote(id, updateNoteRequest.getTitle(), updateNoteRequest.getContent(), user, updateNoteRequest.isPinned(), updateNoteRequest.isArchived(), updateNoteRequest.getTags()));
         return ResponseEntity.ok(note);
 
 

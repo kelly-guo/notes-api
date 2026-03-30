@@ -64,10 +64,15 @@ public class NoteServiceImpl implements NoteService {
         return note;
     }
     @Override
-    public Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived) {
+    public Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived, List<String>tags) {
         Note note= noteRepo.findById(noteId).orElseThrow(() -> new RuntimeException("Note not found"));
         if (!note.getUser().getUserId().equals(user.getUserId())){
             throw new RuntimeException("User does not match");
+        }
+
+        if (!tags.isEmpty()||tags!=null){
+            note.setTags(processTags(tags));
+
         }
         //ADD FULL UPDATE
         note.setContents(content);
