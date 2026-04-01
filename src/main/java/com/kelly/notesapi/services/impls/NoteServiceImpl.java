@@ -53,7 +53,7 @@ public class NoteServiceImpl implements NoteService {
             notes= noteRepo.findByUserIdAndTags_Name(userId, tag, pageable);
         }    
         else {
-            notes = noteRepo.findByUserId(userId,pageable);
+            notes = noteRepo.findByUserAndDeletedFalse(userId,pageable);
         }
 
         return notes;     
@@ -113,6 +113,21 @@ public class NoteServiceImpl implements NoteService {
 
 
         
+    }
+
+    public Page<Note> getTrashedNotes(Long userId, Pageable page){
+        return noteRepo.findByUserIdAndDeletedTrue(userId, page);
+
+    }
+
+    public void moveToTrash(Long userId, Long noteId){
+        Note note = noteRepo.findByNoteIdAndUserAndDeletedFalse(noteId,userRepo.findById(userId).orElseThrow()).orElseThrow();
+        note.setDeleted(true);
+        noteRepo.save(note);
+
+
+
+
     }
 
     

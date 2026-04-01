@@ -37,6 +37,8 @@ public class Note {
 
     private boolean archived;
 
+    private boolean deleted;
+
     private LocalDateTime updatedAt;
 
     private LocalDateTime createdAt;
