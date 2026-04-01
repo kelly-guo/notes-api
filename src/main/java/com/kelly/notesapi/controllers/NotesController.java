@@ -42,9 +42,9 @@ public class NotesController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<NoteResponse>> getAllNotes(Authentication auth, @RequestParam(required=false) Boolean archived, @RequestParam(required=false) Boolean pinned, Pageable pageable){
+    public ResponseEntity<Page<NoteResponse>> getAllNotes(Authentication auth, @RequestParam(required=false) Boolean archived, @RequestParam(required=false) Boolean pinned, @RequestParam(required=false) String tag, Pageable pageable){
         User user = (User) auth.getPrincipal();
-        Page<NoteResponse> notes = noteService.getUserNotes(user,pinned,archived,pageable).map(noteMapper::toDto);
+        Page<NoteResponse> notes = noteService.getUserNotes(user,pinned,archived, tag, pageable).map(noteMapper::toDto);
         return ResponseEntity.ok(notes);
     }
 

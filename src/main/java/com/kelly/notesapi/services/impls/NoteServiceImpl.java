@@ -40,7 +40,7 @@ public class NoteServiceImpl implements NoteService {
 
     }
     @Override
-    public Page<Note> getUserNotes(User user, Boolean pinned, Boolean archived, Pageable pageable) {
+    public Page<Note> getUserNotes(User user, Boolean pinned, Boolean archived, String tag, Pageable pageable) {
         Page<Note>notes;
         Long userId = user.getUserId();
         if (pinned!=null&&archived!=null){
@@ -49,7 +49,10 @@ public class NoteServiceImpl implements NoteService {
             notes = noteRepo.findByUserIdAndPinned(userId, pinned,pageable);
         } else if (archived!=null){
             notes = noteRepo.findByUserIdAndArchived(userId, archived,pageable);
-        } else {
+        } else if (tag!=null){
+            notes= noteRepo.findByUserIdAndTags_Name(userId, tag, pageable);
+        }    
+        else {
             notes = noteRepo.findByUserId(userId,pageable);
         }
 
