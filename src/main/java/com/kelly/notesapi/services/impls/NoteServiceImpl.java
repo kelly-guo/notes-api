@@ -124,10 +124,18 @@ public class NoteServiceImpl implements NoteService {
         Note note = noteRepo.findByNoteIdAndUserAndDeletedFalse(noteId,userRepo.findById(userId).orElseThrow()).orElseThrow();
         note.setDeleted(true);
         noteRepo.save(note);
+    }
 
-
-
-
+    public void restoreNote(Long noteId, Long userId){
+        Note note = noteRepo.findById(noteId).orElseThrow();
+        if (note.getUser().getUserId()!=userId){
+            throw new RuntimeException("Not authorized");
+        }
+        if (note.isDeleted()!=true){
+            throw new RuntimeException("Note not in trash");
+        }
+        note.setDeleted(false);
+        noteRepo.save(note);
     }
 
     
