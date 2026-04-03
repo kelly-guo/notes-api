@@ -138,6 +138,18 @@ public class NoteServiceImpl implements NoteService {
         noteRepo.save(note);
     }
 
+    public void permaDelete(Long noteId, Long userId){
+        Note note = noteRepo.findById(noteId).orElseThrow();
+        if (note.getUser().getUserId()!=userId){
+            throw new RuntimeException("Not authorized");
+        }
+        if (note.isDeleted()!=true){
+            throw new RuntimeException("Note must be in trash");
+        }
+
+        noteRepo.delete(note);
+    }
+
     
 
 
