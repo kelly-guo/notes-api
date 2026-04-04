@@ -86,15 +86,6 @@ public class NoteServiceImpl implements NoteService {
         return noteRepo.save(note);
     }
     @Override
-    public void deleteNote(Long id, User user) {
-        Note note= noteRepo.findById(id).orElseThrow(() -> new RuntimeException("Note not found"));
-        if (!note.getUser().getUserId().equals(user.getUserId())){
-            throw new RuntimeException("User does not match");
-        }
-        noteRepo.delete(note);
-    }
-   
-    @Override
     public Set<Tag> processTags(List<String> names) {
         if (names==null||names.isEmpty()){
             return new HashSet<>();
@@ -115,17 +106,20 @@ public class NoteServiceImpl implements NoteService {
         
     }
 
+    @Override
     public Page<Note> getTrashedNotes(Long userId, Pageable page){
         return noteRepo.findByUserIdAndDeletedTrue(userId, page);
 
     }
 
+    @Override
     public void moveToTrash(Long userId, Long noteId){
         Note note = noteRepo.findByNoteIdAndUserAndDeletedFalse(noteId,userRepo.findById(userId).orElseThrow()).orElseThrow();
         note.setDeleted(true);
         noteRepo.save(note);
     }
 
+    @Override
     public void restoreNote(Long noteId, Long userId){
         Note note = noteRepo.findById(noteId).orElseThrow();
         if (note.getUser().getUserId()!=userId){
@@ -138,6 +132,7 @@ public class NoteServiceImpl implements NoteService {
         noteRepo.save(note);
     }
 
+    @Override
     public void permaDelete(Long noteId, Long userId){
         Note note = noteRepo.findById(noteId).orElseThrow();
         if (note.getUser().getUserId()!=userId){

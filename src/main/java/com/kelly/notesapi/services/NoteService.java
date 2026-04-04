@@ -20,9 +20,15 @@ public interface NoteService {
 
     Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived, List<String>tags);
 
-    void deleteNote(Long id, User user);
-
     Set<Tag> processTags(List<String>names);
+
+    Page<Note> getTrashedNotes(Long userId, Pageable page);
+
+    void moveToTrash(Long userId, Long noteId);
+
+    void restoreNote(Long noteId, Long userId);
+
+    void permaDelete(Long noteId, Long userId);
 
 
 

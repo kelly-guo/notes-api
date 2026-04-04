@@ -4,7 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -48,6 +50,14 @@ public class NotesController {
         return ResponseEntity.ok(notes);
     }
 
+    @GetMapping
+    public ResponseEntity<Page<NoteResponse>> getTrashNotes(Authentication auth, Pageable pageable){
+        User user = (User) auth.getPrincipal();
+        Long userId = user.getUserId();
+        Page<NoteResponse> notes = noteService.getTrashedNotes(userId, pageable).map(noteMapper::toDto);
+        return ResponseEntity.ok(notes);
+    }
+
     @GetMapping(path = "/{id}")
     public ResponseEntity<NoteResponse> getNote(@PathVariable Long id, Authentication auth){
         User user = (User) auth.getPrincipal();
@@ -63,6 +73,30 @@ public class NotesController {
         return ResponseEntity.ok(note);
 
 
+    }
+
+    @DeleteMapping(path = "/{noteId}")
+    public ResponseEntity<Void> deleteNote(@PathVariable Long noteId, Authentication auth){
+        User user = (User) auth.getPrincipal();
+        Long userId=user.getUserId();
+        noteService.moveToTrash(noteId, userId);
+        return ResponseEntity.noContent().build();
+    }
+
+     @PatchMapping(path = "/{noteId}/restore")
+    public ResponseEntity<Void> restoreNote(@PathVariable Long noteId, Authentication auth){
+        User user = (User) auth.getPrincipal();
+        Long userId=user.getUserId();
+        noteService.restoreNote(noteId, userId);
+        return ResponseEntity.noContent().build();
+    }
+
+     @DeleteMapping(path = "/{noteId}/force")
+    public ResponseEntity<Void> forceNote(@PathVariable Long noteId, Authentication auth){
+        User user = (User) auth.getPrincipal();
+        Long userId=user.getUserId();
+        noteService.permaDelete(noteId, userId);
+        return ResponseEntity.noContent().build();
     }
 
 
