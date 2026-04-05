@@ -1,5 +1,6 @@
 package com.kelly.notesapi.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -12,13 +13,13 @@ import com.kelly.notesapi.entities.User;
 
 public interface NoteService {
 
-    Note createNote(User user, String title, String content, List<String>tags);
+    Note createNote(User user, String title, String content, List<String>tags, LocalDateTime reminder);
 
     Page<Note> getUserNotes(User user, Boolean pinned, Boolean archived, String tag, Pageable pageable);
 
     Note getByNoteId(Long id, User user);
 
-    Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived, List<String>tags);
+    Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived, List<String>tags, LocalDateTime reminder);
 
     Set<Tag> processTags(List<String>names);
 

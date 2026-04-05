@@ -1,6 +1,7 @@
 package com.kelly.notesapi.controllers.dtos;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
@@ -17,6 +18,8 @@ public class CreateNoteRequest {
     private String content;
 
     private List<String>tags;
+
+    private LocalDateTime reminder;
 
 
     

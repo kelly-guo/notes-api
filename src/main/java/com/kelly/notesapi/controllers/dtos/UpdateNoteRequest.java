@@ -1,5 +1,6 @@
 package com.kelly.notesapi.controllers.dtos;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.validation.constraints.Size;
@@ -18,6 +19,8 @@ public class UpdateNoteRequest {
     private boolean pinned;
 
     private List<String>tags;
+
+    private LocalDateTime reminder;
 
 
     

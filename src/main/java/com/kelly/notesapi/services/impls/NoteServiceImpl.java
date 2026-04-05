@@ -28,13 +28,14 @@ public class NoteServiceImpl implements NoteService {
         this.tagRepo = tagRepo;
     }
     @Override
-    public Note createNote(User user, String title, String content, List<String>names) {
+    public Note createNote(User user, String title, String content, List<String>names, LocalDateTime reminder) {
         Note note = new Note();
         note.setTitle(title);
         note.setUser(user);
         note.setContents(content);
         note.setCreatedAt(LocalDateTime.now());
         note.setTags(processTags(names));
+        note.setReminder(reminder);
         return noteRepo.save(note);
 
 
@@ -67,7 +68,7 @@ public class NoteServiceImpl implements NoteService {
         return note;
     }
     @Override
-    public Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived, List<String>tags) {
+    public Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived, List<String>tags,LocalDateTime reminder) {
         Note note= noteRepo.findById(noteId).orElseThrow(() -> new RuntimeException("Note not found"));
         if (!note.getUser().getUserId().equals(user.getUserId())){
             throw new RuntimeException("User does not match");
@@ -83,6 +84,7 @@ public class NoteServiceImpl implements NoteService {
         note.setUpdatedAt(LocalDateTime.now());
         note.setArchived(archived);
         note.setPinned(pinned);
+        note.setReminder(reminder);
         return noteRepo.save(note);
     }
     @Override

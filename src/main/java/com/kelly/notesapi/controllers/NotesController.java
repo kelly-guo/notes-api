@@ -38,7 +38,7 @@ public class NotesController {
     @PostMapping
     public ResponseEntity<NoteResponse> createNote(@Valid @RequestBody CreateNoteRequest createNoteRequest, Authentication auth){
         User user = (User) auth.getPrincipal();
-        NoteResponse note = noteMapper.toDto(noteService.createNote(user, createNoteRequest.getTitle(), createNoteRequest.getContent(),createNoteRequest.getTags()));
+        NoteResponse note = noteMapper.toDto(noteService.createNote(user, createNoteRequest.getTitle(), createNoteRequest.getContent(),createNoteRequest.getTags(), createNoteRequest.getReminder()));
         return ResponseEntity.ok(note);
 
     }
@@ -69,7 +69,7 @@ public class NotesController {
     public ResponseEntity<NoteResponse> updateNote(@PathVariable Long id, @Valid @RequestBody UpdateNoteRequest updateNoteRequest, Authentication auth){
         User user = (User) auth.getPrincipal();
         //ADD FULL UPDATE
-        NoteResponse note = noteMapper.toDto(noteService.updateNote(id, updateNoteRequest.getTitle(), updateNoteRequest.getContent(), user, updateNoteRequest.isPinned(), updateNoteRequest.isArchived(), updateNoteRequest.getTags()));
+        NoteResponse note = noteMapper.toDto(noteService.updateNote(id, updateNoteRequest.getTitle(), updateNoteRequest.getContent(), user, updateNoteRequest.isPinned(), updateNoteRequest.isArchived(), updateNoteRequest.getTags(), updateNoteRequest.getReminder()));
         return ResponseEntity.ok(note);
 
 

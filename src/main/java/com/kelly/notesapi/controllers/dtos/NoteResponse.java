@@ -17,6 +17,7 @@ public class NoteResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<Tag>tags;
+    private LocalDateTime reminder;
 
 
 
