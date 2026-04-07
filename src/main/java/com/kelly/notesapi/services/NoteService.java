@@ -31,6 +31,10 @@ public interface NoteService {
 
     void permaDelete(Long noteId, Long userId);
 
+    void removeReminder(Long noteId, Long userId);
+
+    Page<Note> getReminderNotes(Long userId, Pageable page);
+
 
 
 

@@ -146,6 +146,17 @@ public class NoteServiceImpl implements NoteService {
 
         noteRepo.delete(note);
     }
+    @Override
+    public void removeReminder(Long noteId, Long userId) {
+        User user = userRepo.findById(userId).orElseThrow();
+        Note note= noteRepo.findById(noteId).orElseThrow();
+        note.setReminder(null);
+    }
+    @Override
+    public Page<Note> getReminderNotes(Long userId, Pageable page) {
+        User user = userRepo.findById(userId).orElseThrow();
+        return noteRepo.findByUserAndDeletedFalseAndReminderAtAfter(user, LocalDateTime.now(), page);
+    }
 
     
 
