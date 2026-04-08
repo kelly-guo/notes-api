@@ -153,7 +153,7 @@ public class NoteServiceImpl implements NoteService {
         note.setReminder(null);
     }
     @Override
-    public Page<Note> getReminderNotes(Long userId, Pageable page) {
+    public Page<Note> getUpcomingReminderNotes(Long userId, Pageable page) {
         User user = userRepo.findById(userId).orElseThrow();
         return noteRepo.findByUserAndDeletedFalseAndReminderAtAfter(user, LocalDateTime.now(), page);
     }

@@ -99,6 +99,21 @@ public class NotesController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping(path = "/upcoming/reminders")
+    public ResponseEntity<Page<NoteResponse>> getUpcomingReminders(@RequestParam Long userId, Pageable pageable){
+        return ResponseEntity.ok(noteService.getUpcomingReminderNotes(userId, pageable).map(noteMapper::toDto));
+    }
+
+    @PatchMapping(path = "/{noteId}/reminders/remove")
+    public ResponseEntity<Void> removeReminders(@PathVariable Long noteId, @RequestParam Long userId){
+        noteService.removeReminder(noteId, userId);
+        return ResponseEntity.ok().build();
+
+
+    }
+
+
+
 
 
 

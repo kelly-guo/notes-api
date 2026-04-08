@@ -33,7 +33,7 @@ public interface NoteService {
 
     void removeReminder(Long noteId, Long userId);
 
-    Page<Note> getReminderNotes(Long userId, Pageable page);
+    Page<Note> getUpcomingReminderNotes(Long userId, Pageable page);
 
 
 
