@@ -35,6 +35,8 @@ public interface NoteService {
 
     Page<Note> getUpcomingReminderNotes(Long userId, Pageable page);
 
+      Page<Note> getReminderNotes(Long userId, Pageable page);
+
 
 
 

@@ -32,6 +32,11 @@ public interface NoteRepo extends JpaRepository<Note, Long>{
     Pageable pageable
 );
 
+Page<Note> findByUserAndDeletedFalseAndReminderAtIsNotNull(
+    User user,
+    Pageable pageable
+);
+
 
 
     

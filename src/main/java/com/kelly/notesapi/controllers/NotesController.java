@@ -91,7 +91,7 @@ public class NotesController {
         return ResponseEntity.noContent().build();
     }
 
-     @DeleteMapping(path = "/{noteId}/force")
+    @DeleteMapping(path = "/{noteId}/force")
     public ResponseEntity<Void> forceNote(@PathVariable Long noteId, Authentication auth){
         User user = (User) auth.getPrincipal();
         Long userId=user.getUserId();
@@ -109,7 +109,11 @@ public class NotesController {
         noteService.removeReminder(noteId, userId);
         return ResponseEntity.ok().build();
 
+    }
 
+    @GetMapping(path = "/reminders")
+    public ResponseEntity<Page<NoteResponse>> getReminders(@RequestParam Long userId, Pageable pageable){
+        return ResponseEntity.ok(noteService.getReminderNotes(userId, pageable).map(noteMapper::toDto));
     }
 
 
