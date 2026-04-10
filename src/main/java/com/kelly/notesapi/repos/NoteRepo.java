@@ -2,6 +2,7 @@ package com.kelly.notesapi.repos;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -36,6 +37,8 @@ Page<Note> findByUserAndDeletedFalseAndReminderAtIsNotNull(
     User user,
     Pageable pageable
 );
+
+List<Note> findByReminderAtBeforeAndReminderSentFalseAndDeletedFalse(LocalDateTime now);
 
 
 

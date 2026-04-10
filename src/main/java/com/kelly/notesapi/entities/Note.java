@@ -45,6 +45,8 @@ public class Note {
 
     private LocalDateTime reminder;
 
+    private boolean reminderSent;
+
     @ManyToMany
     @JoinTable(name = "note_tags", joinColumns=@JoinColumn(name = "note_id"), inverseJoinColumns=@JoinColumn(name = "tag_id"))
     private Set<Tag> tags = new HashSet<>();
