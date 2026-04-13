@@ -10,6 +10,7 @@ import com.kelly.notesapi.entities.Note;
 import com.kelly.notesapi.entities.Notification;
 import com.kelly.notesapi.repos.NoteRepo;
 import com.kelly.notesapi.repos.NotificationRepo;
+import com.kelly.notesapi.services.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,18 +20,13 @@ public class ReminderScheduler {
 
     private final NoteRepo noteRepository;
     private final NotificationRepo notificationRepo;
+    private final NotificationService notificationService;
 
     @Scheduled(fixedRate=60000)
     public void checkReminders(){
         List<Note> dueNotes = noteRepository.findByReminderAtBeforeAndReminderSentFalseAndDeletedFalse(LocalDateTime.now());
         for (Note note:dueNotes){
-            Notification notification = new Notification();
-            notification.setMessage("Reminder: " + note.getTitle());
-            notification.setCreatedAt(LocalDateTime.now());
-            notification.setRead(false);
-            notification.setUser(note.getUser());
-
-            notificationRepo.save(notification);
+            notificationService.createNotification(note);
 
             note.setReminderSent(true);
         }
