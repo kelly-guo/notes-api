@@ -1,7 +1,15 @@
 package com.kelly.notesapi.controllers;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.kelly.notesapi.controllers.dtos.NotificationResponse;
+import com.kelly.notesapi.mappers.NotificationMapper;
+import com.kelly.notesapi.services.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -9,6 +17,22 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping(path = "/notifications")
 public class NotificationController {
-    private final 
+    private final NotificationService notificationService;
+    private final NotificationMapper notificationMapper;
+
+    @GetMapping
+    public List<NotificationResponse> getNotifications(@RequestParam Long userId){
+        return notificationService.getUserNotifs(userId).stream().map(notificationMapper::toDto).toList();
+    }
+
+    @GetMapping
+    public List<NotificationResponse> getUnreadNotifications(@RequestParam Long userId){
+        return notificationService.getUnreadNotifs(userId).stream().map(notificationMapper::toDto).toList();
+    }
+
+
+
+
+
     
 }
