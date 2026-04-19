@@ -7,26 +7,31 @@ import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
+import com.kelly.notesapi.controllers.dtos.Permissions;
 import com.kelly.notesapi.entities.Note;
+import com.kelly.notesapi.entities.NoteShare;
 import com.kelly.notesapi.entities.Tag;
 import com.kelly.notesapi.entities.User;
 import com.kelly.notesapi.repos.NoteRepo;
+import com.kelly.notesapi.repos.NoteShareRepo;
 import com.kelly.notesapi.repos.TagRepo;
 import com.kelly.notesapi.repos.UserRepo;
 import com.kelly.notesapi.services.NoteService;
 
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
 public class NoteServiceImpl implements NoteService {
 
     private final NoteRepo noteRepo;
     private final UserRepo userRepo;
     private final TagRepo tagRepo;
+    private final NoteShareRepo noteShareRepo;
    
-    public NoteServiceImpl(NoteRepo noteRepo, UserRepo userRepo, TagRepo tagRepo) {
-        this.noteRepo = noteRepo;
-        this.userRepo = userRepo;
-        this.tagRepo = tagRepo;
-    }
+    
     @Override
     public Note createNote(User user, String title, String content, List<String>names, LocalDateTime reminder) {
         Note note = new Note();
@@ -161,6 +166,27 @@ public class NoteServiceImpl implements NoteService {
     public Page<Note> getReminderNotes(Long userId, Pageable page) {
         User user = userRepo.findById(userId).orElseThrow();
         return noteRepo.findByUserAndDeletedFalseAndReminderAtIsNotNull(user, page);
+    }
+    @Override
+    public void shareNote(Long userId, Long noteId, Permissions permissions) {
+        Note note = noteRepo.findById(noteId).orElseThrow();
+        User user = userRepo.findById(userId).orElseThrow();
+
+        NoteShare noteShare = new NoteShare();
+        noteShare.setNote(note);
+        noteShare.setUser(user);
+        noteShare.setPermissions(permissions);
+        noteShareRepo.save(noteShare);
+        
+    }
+    @Override
+    public Page<Note> getSharedNotes(User user, Pageable pageable) {
+        return noteShareRepo.findByUser(user,pageable).map(NoteShare::getNote);
+    }
+    @Override
+    public boolean canEdit(User user, Note note) {
+        if (note.getUser().equals(user)) return true;
+        return noteShareRepo.findByNoteAndUser(note,user).map(share->share.getPermissions()==Permissions.WRITE).orElse(false);
     }
 
     

@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.kelly.notesapi.controllers.dtos.Permissions;
 import com.kelly.notesapi.entities.Note;
 import com.kelly.notesapi.entities.Tag;
 import com.kelly.notesapi.entities.User;
@@ -36,6 +37,12 @@ public interface NoteService {
     Page<Note> getUpcomingReminderNotes(Long userId, Pageable page);
 
       Page<Note> getReminderNotes(Long userId, Pageable page);
+
+      void shareNote(Long userId, Long noteId, Permissions permissions);
+
+      Page<Note>getSharedNotes(User user, Pageable pageable);
+
+      public boolean canEdit(User user, Note note);
 
 
 
