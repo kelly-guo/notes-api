@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kelly.notesapi.controllers.dtos.CreateNoteRequest;
 import com.kelly.notesapi.controllers.dtos.NoteResponse;
+import com.kelly.notesapi.controllers.dtos.ShareNoteRequest;
 import com.kelly.notesapi.controllers.dtos.UpdateNoteRequest;
 import com.kelly.notesapi.entities.User;
 import com.kelly.notesapi.mappers.NoteMapper;
@@ -114,6 +115,18 @@ public class NotesController {
     @GetMapping(path = "/reminders")
     public ResponseEntity<Page<NoteResponse>> getReminders(@RequestParam Long userId, Pageable pageable){
         return ResponseEntity.ok(noteService.getReminderNotes(userId, pageable).map(noteMapper::toDto));
+    }
+
+    @GetMapping("/shared")
+    public ResponseEntity<Page<NoteResponse>> getSharedNotes(Authentication authentication, Pageable pageable){
+        User user=(User) authentication.getPrincipal();
+        return ResponseEntity.ok(noteService.getSharedNotes(user,pageable).map(noteMapper::toDto));
+    }
+
+    @PostMapping("/{noteId}/share")
+    public void shareNote(Long noteId, @RequestBody ShareNoteRequest shareNoteRequest){
+        noteService.shareNote(shareNoteRequest.getUserId(), noteId, shareNoteRequest.getPermissions());
+        
     }
 
 
