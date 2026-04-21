@@ -19,6 +19,7 @@ import com.kelly.notesapi.controllers.dtos.CreateNoteRequest;
 import com.kelly.notesapi.controllers.dtos.NoteResponse;
 import com.kelly.notesapi.controllers.dtos.ShareNoteRequest;
 import com.kelly.notesapi.controllers.dtos.UpdateNoteRequest;
+import com.kelly.notesapi.entities.Note;
 import com.kelly.notesapi.entities.User;
 import com.kelly.notesapi.mappers.NoteMapper;
 import com.kelly.notesapi.services.NoteService;
@@ -124,9 +125,14 @@ public class NotesController {
     }
 
     @PostMapping("/{noteId}/share")
-    public void shareNote(Long noteId, @RequestBody ShareNoteRequest shareNoteRequest){
-        noteService.shareNote(shareNoteRequest.getUserId(), noteId, shareNoteRequest.getPermissions());
-        
+    public void shareNote(Long noteId, @RequestBody ShareNoteRequest shareNoteRequest){ 
+        noteService.shareNote(shareNoteRequest.getUserId(), noteId, shareNoteRequest.getPermissions());  
+    }
+
+    @DeleteMapping("/{noteId}/share/{userId}")
+    public void deleteShare(@PathVariable Long noteId, @PathVariable Long userId, Authentication authentication){
+        User user=(User) authentication.getPrincipal();
+        noteService.removeAccess(noteId, userId, user);
     }
 
 

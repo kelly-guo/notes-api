@@ -42,7 +42,9 @@ public interface NoteService {
 
       Page<Note>getSharedNotes(User user, Pageable pageable);
 
-      public boolean canEdit(User user, Note note);
+      boolean canEdit(User user, Note note);
+
+      void removeAccess(Long noteId, Long userId, User currentUser);
 
 
 

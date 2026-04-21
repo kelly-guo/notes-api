@@ -188,6 +188,16 @@ public class NoteServiceImpl implements NoteService {
         if (note.getUser().equals(user)) return true;
         return noteShareRepo.findByNoteAndUser(note,user).map(share->share.getPermissions()==Permissions.WRITE).orElse(false);
     }
+    @Override
+    public void removeAccess(Long noteId, Long userId, User currentUser) {
+        Note note = noteRepo.findById(noteId).orElseThrow();
+        User user = userRepo.findById(userId).orElseThrow();
+        if (!note.getUser().equals(currentUser)) throw new RuntimeException("You are not the owner!");
+        NoteShare noteShare = noteShareRepo.findByNoteAndUser(note,user).orElseThrow();
+        noteShareRepo.delete(noteShare);
+    }
+
+    
 
     
 
