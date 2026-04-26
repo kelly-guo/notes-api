@@ -19,6 +19,7 @@ import com.kelly.notesapi.controllers.dtos.CreateNoteRequest;
 import com.kelly.notesapi.controllers.dtos.NoteResponse;
 import com.kelly.notesapi.controllers.dtos.ShareNoteRequest;
 import com.kelly.notesapi.controllers.dtos.UpdateNoteRequest;
+import com.kelly.notesapi.controllers.dtos.UpdatePermissionsRequest;
 import com.kelly.notesapi.entities.Note;
 import com.kelly.notesapi.entities.User;
 import com.kelly.notesapi.mappers.NoteMapper;
@@ -133,6 +134,13 @@ public class NotesController {
     public void deleteShare(@PathVariable Long noteId, @PathVariable Long userId, Authentication authentication){
         User user=(User) authentication.getPrincipal();
         noteService.removeAccess(noteId, userId, user);
+    }
+
+    @PatchMapping("/{noteId}/share")
+    public void updatePermissions(@RequestBody UpdatePermissionsRequest updatePermissionsRequest, @PathVariable Long noteId, Authentication authentication){
+        User user=(User) authentication.getPrincipal();
+        noteService.editPermissions(updatePermissionsRequest,user,noteId);
+
     }
 
 
