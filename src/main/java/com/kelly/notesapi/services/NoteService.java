@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.kelly.notesapi.controllers.dtos.Permissions;
+import com.kelly.notesapi.controllers.dtos.SharedNoteResponse;
 import com.kelly.notesapi.controllers.dtos.UpdatePermissionsRequest;
 import com.kelly.notesapi.entities.Note;
 import com.kelly.notesapi.entities.Tag;
@@ -48,6 +49,8 @@ public interface NoteService {
       void removeAccess(Long noteId, Long userId, User currentUser);
 
       void editPermissions(UpdatePermissionsRequest updatePermissionsRequest, User currentUser, Long noteId);
+
+      List<SharedNoteResponse> getShares(Long noteId, User currentUser);
 
 
 

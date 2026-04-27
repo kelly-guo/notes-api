@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.kelly.notesapi.controllers.dtos.Permissions;
+import com.kelly.notesapi.controllers.dtos.SharedNoteResponse;
 import com.kelly.notesapi.controllers.dtos.UpdatePermissionsRequest;
 import com.kelly.notesapi.entities.Note;
 import com.kelly.notesapi.entities.NoteShare;
@@ -206,6 +207,19 @@ public class NoteServiceImpl implements NoteService {
         noteShare.setPermissions(updatePermissionsRequest.getPermissions());
         noteShareRepo.save(noteShare);
 
+    }
+    @Override
+    public List<SharedNoteResponse> getShares(Long noteId, User currentUser) {
+        Note note=noteRepo.findById(noteId).orElseThrow();
+        if (!note.getUser().equals(currentUser)) throw new RuntimeException("You are not the owner!");
+        return noteShareRepo.findByNote(note).stream().map(share ->{
+            SharedNoteResponse sharedNoteResponse = new SharedNoteResponse();
+            sharedNoteResponse.setEmail(share.getUser().getEmail());
+            sharedNoteResponse.setUserId(share.getUser().getUserId());
+            sharedNoteResponse.setPermissions(share.getPermissions());
+            return sharedNoteResponse;
+        }).toList();
+        
     }
 
     

@@ -1,5 +1,7 @@
 package com.kelly.notesapi.controllers;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kelly.notesapi.controllers.dtos.CreateNoteRequest;
 import com.kelly.notesapi.controllers.dtos.NoteResponse;
 import com.kelly.notesapi.controllers.dtos.ShareNoteRequest;
+import com.kelly.notesapi.controllers.dtos.SharedNoteResponse;
 import com.kelly.notesapi.controllers.dtos.UpdateNoteRequest;
 import com.kelly.notesapi.controllers.dtos.UpdatePermissionsRequest;
 import com.kelly.notesapi.entities.Note;
@@ -140,6 +143,15 @@ public class NotesController {
     public void updatePermissions(@RequestBody UpdatePermissionsRequest updatePermissionsRequest, @PathVariable Long noteId, Authentication authentication){
         User user=(User) authentication.getPrincipal();
         noteService.editPermissions(updatePermissionsRequest,user,noteId);
+
+    }
+
+
+    @GetMapping("/{noteId}/get-shares")
+    public List<SharedNoteResponse> getShares(@PathVariable Long noteId, Authentication authentication){
+         User user=(User) authentication.getPrincipal();
+         return noteService.getShares(noteId,user);
+
 
     }
 
