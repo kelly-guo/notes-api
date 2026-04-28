@@ -52,6 +52,8 @@ public interface NoteService {
 
       List<SharedNoteResponse> getShares(Long noteId, User currentUser);
 
+      void shareNoteByEmail(User currentUser, Long noteId, String email, Permissions permissions);
+
 
 
 

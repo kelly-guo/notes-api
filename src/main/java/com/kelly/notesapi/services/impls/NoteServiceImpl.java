@@ -221,6 +221,21 @@ public class NoteServiceImpl implements NoteService {
         }).toList();
         
     }
+    @Override
+    public void shareNoteByEmail(User currentUser, Long noteId, String email, Permissions permissions) {
+        Note note=noteRepo.findById(noteId).orElseThrow();
+        if (!note.getUser().equals(currentUser)) throw new RuntimeException("You are not the owner!");
+        User user = userRepo.findByEmail(email).orElseThrow();
+        if (note.getUser().equals(user)) throw new RuntimeException("Cannot share with yourself!");
+        if (noteShareRepo.findByNoteAndUser(note,user).isPresent()) throw new RuntimeException("Already shared!");
+        NoteShare share= new NoteShare();
+        share.setNote(note);
+        share.setPermissions(permissions);
+        share.setUser(user);
+
+        noteShareRepo.save(share);
+        
+    }
 
     
 
