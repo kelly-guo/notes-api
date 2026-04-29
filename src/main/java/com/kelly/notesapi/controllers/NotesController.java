@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kelly.notesapi.controllers.dtos.CreateNoteRequest;
 import com.kelly.notesapi.controllers.dtos.NoteResponse;
+import com.kelly.notesapi.controllers.dtos.ShareNoteByEmailRequest;
 import com.kelly.notesapi.controllers.dtos.ShareNoteRequest;
 import com.kelly.notesapi.controllers.dtos.SharedNoteResponse;
 import com.kelly.notesapi.controllers.dtos.UpdateNoteRequest;
@@ -151,7 +152,12 @@ public class NotesController {
     public List<SharedNoteResponse> getShares(@PathVariable Long noteId, Authentication authentication){
          User user=(User) authentication.getPrincipal();
          return noteService.getShares(noteId,user);
+    }
 
+    @PostMapping("/{noteId}/share-email")
+    public void shareNoteByEmail(@PathVariable Long noteId, Authentication auth, ShareNoteByEmailRequest shareNoteByEmailRequest){
+        User user=(User) auth.getPrincipal();
+        noteService.shareNoteByEmail(user,noteId,shareNoteByEmailRequest.getEmail(), shareNoteByEmailRequest.getPermissions());
 
     }
 
