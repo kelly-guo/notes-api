@@ -54,6 +54,8 @@ public interface NoteService {
 
       void shareNoteByEmail(User currentUser, Long noteId, String email, Permissions permissions);
 
+      void checkAccess(User user, Note note);
+
 
 
 

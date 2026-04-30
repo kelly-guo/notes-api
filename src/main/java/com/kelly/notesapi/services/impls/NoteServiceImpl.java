@@ -236,6 +236,14 @@ public class NoteServiceImpl implements NoteService {
         noteShareRepo.save(share);
         
     }
+    @Override
+    public void checkAccess(User user, Note note) {
+        if (note.getUser().equals(user)) return;
+
+        NoteShare noteShare = noteShareRepo.findByNoteAndUser(note,user).orElseThrow();
+
+        if (noteShare.getPermissions().equals(Permissions.READ)) throw new RuntimeException("No permission to write!");
+    }
 
     
 
