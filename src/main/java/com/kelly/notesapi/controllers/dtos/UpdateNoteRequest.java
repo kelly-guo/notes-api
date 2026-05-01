@@ -3,6 +3,8 @@ package com.kelly.notesapi.controllers.dtos;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.kelly.notesapi.entities.Priorities;
+
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -21,6 +23,8 @@ public class UpdateNoteRequest {
     private List<String>tags;
 
     private LocalDateTime reminder;
+
+    private Priorities priorities;
 
 
     

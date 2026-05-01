@@ -4,6 +4,8 @@ package com.kelly.notesapi.controllers.dtos;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.kelly.notesapi.entities.Priorities;
+
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -22,6 +24,8 @@ public class CreateNoteRequest {
 
     @Future(message="Reminder must be future")
     private LocalDateTime reminder;
+
+    private Priorities priorities;
 
 
     
