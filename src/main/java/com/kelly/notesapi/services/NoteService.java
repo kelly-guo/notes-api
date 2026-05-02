@@ -11,18 +11,19 @@ import com.kelly.notesapi.controllers.dtos.Permissions;
 import com.kelly.notesapi.controllers.dtos.SharedNoteResponse;
 import com.kelly.notesapi.controllers.dtos.UpdatePermissionsRequest;
 import com.kelly.notesapi.entities.Note;
+import com.kelly.notesapi.entities.Priorities;
 import com.kelly.notesapi.entities.Tag;
 import com.kelly.notesapi.entities.User;
 
 public interface NoteService {
 
-    Note createNote(User user, String title, String content, List<String>tags, LocalDateTime reminder);
+    Note createNote(User user, String title, String content, List<String>tags, LocalDateTime reminder, Priorities priorities);
 
     Page<Note> getUserNotes(User user, Boolean pinned, Boolean archived, String tag, Pageable pageable);
 
     Note getByNoteId(Long id, User user);
 
-    Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived, List<String>tags, LocalDateTime reminder);
+    Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived, List<String>tags, LocalDateTime reminder, Priorities priorities);
 
     Set<Tag> processTags(List<String>names);
 

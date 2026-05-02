@@ -24,7 +24,6 @@ import com.kelly.notesapi.controllers.dtos.ShareNoteRequest;
 import com.kelly.notesapi.controllers.dtos.SharedNoteResponse;
 import com.kelly.notesapi.controllers.dtos.UpdateNoteRequest;
 import com.kelly.notesapi.controllers.dtos.UpdatePermissionsRequest;
-import com.kelly.notesapi.entities.Note;
 import com.kelly.notesapi.entities.User;
 import com.kelly.notesapi.mappers.NoteMapper;
 import com.kelly.notesapi.services.NoteService;
@@ -45,7 +44,7 @@ public class NotesController {
     @PostMapping
     public ResponseEntity<NoteResponse> createNote(@Valid @RequestBody CreateNoteRequest createNoteRequest, Authentication auth){
         User user = (User) auth.getPrincipal();
-        NoteResponse note = noteMapper.toDto(noteService.createNote(user, createNoteRequest.getTitle(), createNoteRequest.getContent(),createNoteRequest.getTags(), createNoteRequest.getReminder()));
+        NoteResponse note = noteMapper.toDto(noteService.createNote(user, createNoteRequest.getTitle(), createNoteRequest.getContent(),createNoteRequest.getTags(), createNoteRequest.getReminder(), createNoteRequest.getPriorities()));
         return ResponseEntity.ok(note);
 
     }
@@ -76,7 +75,7 @@ public class NotesController {
     public ResponseEntity<NoteResponse> updateNote(@PathVariable Long id, @Valid @RequestBody UpdateNoteRequest updateNoteRequest, Authentication auth){
         User user = (User) auth.getPrincipal();
         //ADD FULL UPDATE
-        NoteResponse note = noteMapper.toDto(noteService.updateNote(id, updateNoteRequest.getTitle(), updateNoteRequest.getContent(), user, updateNoteRequest.isPinned(), updateNoteRequest.isArchived(), updateNoteRequest.getTags(), updateNoteRequest.getReminder()));
+        NoteResponse note = noteMapper.toDto(noteService.updateNote(id, updateNoteRequest.getTitle(), updateNoteRequest.getContent(), user, updateNoteRequest.isPinned(), updateNoteRequest.isArchived(), updateNoteRequest.getTags(), updateNoteRequest.getReminder(), updateNoteRequest.getPriorities()));
         return ResponseEntity.ok(note);
 
 

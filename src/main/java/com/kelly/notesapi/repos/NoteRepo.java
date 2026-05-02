@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.kelly.notesapi.entities.Note;
+import com.kelly.notesapi.entities.Priorities;
 import com.kelly.notesapi.entities.User;
 
 public interface NoteRepo extends JpaRepository<Note, Long>{
@@ -26,6 +27,8 @@ public interface NoteRepo extends JpaRepository<Note, Long>{
     Page<Note> findByUserIdAndTags_Name(Long userId, String tagName, Pageable pageable);
 
     Optional<Note> findByNoteIdAndUserAndDeletedFalse(Long noteId, User user);
+
+    Page<Note> findByNoteAndPriorities(Note note, Priorities priorities, Pageable pageable);
 
     Page<Note> findByUserAndDeletedFalseAndReminderAtAfter(
     User user,

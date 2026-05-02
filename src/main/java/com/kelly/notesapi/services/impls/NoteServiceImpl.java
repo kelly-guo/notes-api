@@ -14,6 +14,7 @@ import com.kelly.notesapi.controllers.dtos.SharedNoteResponse;
 import com.kelly.notesapi.controllers.dtos.UpdatePermissionsRequest;
 import com.kelly.notesapi.entities.Note;
 import com.kelly.notesapi.entities.NoteShare;
+import com.kelly.notesapi.entities.Priorities;
 import com.kelly.notesapi.entities.Tag;
 import com.kelly.notesapi.entities.User;
 import com.kelly.notesapi.repos.NoteRepo;
@@ -35,7 +36,7 @@ public class NoteServiceImpl implements NoteService {
    
     
     @Override
-    public Note createNote(User user, String title, String content, List<String>names, LocalDateTime reminder) {
+    public Note createNote(User user, String title, String content, List<String>names, LocalDateTime reminder, Priorities priorities) {
         Note note = new Note();
         note.setTitle(title);
         note.setUser(user);
@@ -43,6 +44,8 @@ public class NoteServiceImpl implements NoteService {
         note.setCreatedAt(LocalDateTime.now());
         note.setTags(processTags(names));
         note.setReminder(reminder);
+        if (priorities!=null) note.setPriorities(priorities);
+        else note.setPriorities(Priorities.MEDIUM);
         return noteRepo.save(note);
 
 
@@ -75,7 +78,7 @@ public class NoteServiceImpl implements NoteService {
         return note;
     }
     @Override
-    public Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived, List<String>tags,LocalDateTime reminder) {
+    public Note updateNote(Long noteId, String title, String content, User user, boolean pinned, boolean archived, List<String>tags,LocalDateTime reminder, Priorities priorities) {
         Note note= noteRepo.findById(noteId).orElseThrow(() -> new RuntimeException("Note not found"));
         if (!note.getUser().getUserId().equals(user.getUserId())){
             throw new RuntimeException("User does not match");
@@ -92,6 +95,7 @@ public class NoteServiceImpl implements NoteService {
         note.setArchived(archived);
         note.setPinned(pinned);
         note.setReminder(reminder);
+        note.setPriorities(priorities);
         return noteRepo.save(note);
     }
     @Override
