@@ -30,6 +30,13 @@ public interface NoteRepo extends JpaRepository<Note, Long>{
 
     Page<Note> findByNoteAndPriorities(Note note, Priorities priorities, Pageable pageable);
 
+    Page<Note> findByOwnerAndPriority(
+    User user,
+    Priorities priority,
+
+    Pageable pageable
+);
+
     Page<Note> findByUserAndDeletedFalseAndReminderAtAfter(
     User user,
     LocalDateTime now,

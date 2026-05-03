@@ -19,7 +19,7 @@ public interface NoteService {
 
     Note createNote(User user, String title, String content, List<String>tags, LocalDateTime reminder, Priorities priorities);
 
-    Page<Note> getUserNotes(User user, Boolean pinned, Boolean archived, String tag, Pageable pageable);
+    Page<Note> getUserNotes(User user, Boolean pinned, Boolean archived, String tag, Priorities priorities,Pageable pageable);
 
     Note getByNoteId(Long id, User user);
 

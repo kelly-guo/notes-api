@@ -24,6 +24,7 @@ import com.kelly.notesapi.controllers.dtos.ShareNoteRequest;
 import com.kelly.notesapi.controllers.dtos.SharedNoteResponse;
 import com.kelly.notesapi.controllers.dtos.UpdateNoteRequest;
 import com.kelly.notesapi.controllers.dtos.UpdatePermissionsRequest;
+import com.kelly.notesapi.entities.Priorities;
 import com.kelly.notesapi.entities.User;
 import com.kelly.notesapi.mappers.NoteMapper;
 import com.kelly.notesapi.services.NoteService;
@@ -50,9 +51,9 @@ public class NotesController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<NoteResponse>> getAllNotes(Authentication auth, @RequestParam(required=false) Boolean archived, @RequestParam(required=false) Boolean pinned, @RequestParam(required=false) String tag, Pageable pageable){
+    public ResponseEntity<Page<NoteResponse>> getAllNotes(Authentication auth, @RequestParam(required=false) Boolean archived, @RequestParam(required=false) Boolean pinned, @RequestParam(required=false) String tag, @RequestParam(required=false)Priorities priorities,Pageable pageable){
         User user = (User) auth.getPrincipal();
-        Page<NoteResponse> notes = noteService.getUserNotes(user,pinned,archived, tag, pageable).map(noteMapper::toDto);
+        Page<NoteResponse> notes = noteService.getUserNotes(user,pinned,archived, tag, priorities, pageable).map(noteMapper::toDto);
         return ResponseEntity.ok(notes);
     }
 
