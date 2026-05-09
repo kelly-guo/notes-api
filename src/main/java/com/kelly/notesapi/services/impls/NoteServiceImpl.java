@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.kelly.notesapi.controllers.dtos.Permissions;
 import com.kelly.notesapi.controllers.dtos.SharedNoteResponse;
 import com.kelly.notesapi.controllers.dtos.UpdatePermissionsRequest;
+import com.kelly.notesapi.entities.ActionType;
 import com.kelly.notesapi.entities.Note;
 import com.kelly.notesapi.entities.NoteShare;
 import com.kelly.notesapi.entities.Priorities;
@@ -21,6 +22,7 @@ import com.kelly.notesapi.repos.NoteRepo;
 import com.kelly.notesapi.repos.NoteShareRepo;
 import com.kelly.notesapi.repos.TagRepo;
 import com.kelly.notesapi.repos.UserRepo;
+import com.kelly.notesapi.services.ActivityLogService;
 import com.kelly.notesapi.services.NoteService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,7 @@ public class NoteServiceImpl implements NoteService {
     private final UserRepo userRepo;
     private final TagRepo tagRepo;
     private final NoteShareRepo noteShareRepo;
+    private final ActivityLogService activityLogService;
    
     
     @Override
@@ -46,6 +49,8 @@ public class NoteServiceImpl implements NoteService {
         note.setReminder(reminder);
         if (priorities!=null) note.setPriorities(priorities);
         else note.setPriorities(Priorities.MEDIUM);
+        activityLogService.log(user, note, ActionType.CREATED, "Created note");
+        
         return noteRepo.save(note);
 
 
@@ -98,6 +103,7 @@ public class NoteServiceImpl implements NoteService {
         note.setPinned(pinned);
         note.setReminder(reminder);
         note.setPriorities(priorities);
+        activityLogService.log(user, note, ActionType.EDITED, "Updated note");
         return noteRepo.save(note);
     }
     @Override
